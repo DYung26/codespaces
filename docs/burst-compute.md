@@ -2,7 +2,7 @@
 
 ## Operating model
 
-The recommended default is a **disposable worker**. The VPS checkout stays authoritative; the CLI snapshots the current tree, creates a Codespace from a tiny launcher repository, transfers the snapshot, runs one combined build/test/lint command under `/tmp/cs-burst-job`, retrieves logs/artifacts, and deletes the worker. This prevents stale source trees, cross-agent races and abandoned compute. Use persistent Codespaces only for interactive work, not as shared mutable build workers.
+The recommended default is a **disposable worker**. The VPS checkout stays authoritative; the CLI snapshots the current tree, creates a Codespace from a tiny launcher repository, transfers the snapshot, runs one combined build/test/lint command under `/workspaces/<project>`, retrieves logs/artifacts, and deletes the worker. This prevents stale source trees, cross-agent races and abandoned compute. Use persistent Codespaces only for interactive work, not as shared mutable build workers.
 
 Project-specific skills select commands and own preview deployment health checks, test credentials, ports and database orchestration. This CLI only transports a snapshot, runs a command, retrieves output and cleans up.
 
@@ -32,7 +32,7 @@ Start with a CLI plus skill. The CLI is deterministic and easy to test: account 
 
 The existing `DYung26/codespaces` repo has `.devcontainer/devcontainer.json` with base image `mcr.microsoft.com/devcontainers/javascript-node:20-trixie`, Docker outside-of-Docker, SSHD and startup hooks for Syncthing, cloudflared and MCP services. Do not remove those scripts or modify main branch blindly: that would break your interactive setup.
 
-The create API automatically selects `.devcontainer/devcontainer.json` if present. Therefore the burst path uses a dedicated launcher repository `DYung26/codespaces-burst` with no `.devcontainer` directory (default Linux image). Keep custom environment scripts separately; they can remain in the original repo and in dotfiles.
+The create API automatically selects `.devcontainer/devcontainer.json` if present. Therefore the burst path uses a dedicated launcher repository `DYung26/codespaces-burst` with no `.devcontainer` directory (default Linux image). The worker then unpacks the current source snapshot into `/workspaces/<project>` to match the local `~/Projects/* → /workspaces/*` convention. Keep custom environment scripts separately; they can remain in the original repo and in dotfiles.
 
 ## Account aliases found in dotfiles
 
