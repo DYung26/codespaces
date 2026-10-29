@@ -58,7 +58,10 @@ note "creating disposable worker from $launcher"
 display="burst-$stamp"
 create_output="$(ghx codespace create --repo "$launcher" --machine "$machine" --idle-timeout "$idle" --retention-period "$retention" --display-name "$display" 2>&1)" || { printf "%s\n" "$create_output" >&2; die "Codespace creation failed"; }
 printf "%s\n" "$create_output" >&2
-cs_name="$(ghx api /user/codespaces --jq ".[] | select(.display_name == \"$display\") | .name" | head -n1)"
+cs_name="$(ghx api /user/codespaces --jq ".[] | select(.display_name == \"$display\") | .name" 2>/dev/null | head -n1 || true)"
+if [[ -z "$cs_name" ]]; then
+  cs_name="$(printf '%s\n' "$create_output" | sed -nE 's/.*codespace ([[:alnum:]-]+).*/\1/p' | tail -n1)"
+fi
 [[ -n "$cs_name" ]] || die "Codespace created but its name could not be resolved for display name $display"
 printf '%s\n' "$cs_name" > "$out_dir/codespace-name.txt"
 script="$tmp/remote.sh"; remote_dir="/workspaces/${repo##*/}"; { cat <<'REMOTE'
