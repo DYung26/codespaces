@@ -35,7 +35,7 @@ cmd="${1:-help}"; shift || true
 case "$cmd" in
  help|-h|--help) usage; exit 0;;
  accounts) for a in gh-26 gh-06 gh-df gh-odo gh-do; do echo "[$a]"; (CS_BURST_ACCOUNT="$a"; export CS_BURST_ACCOUNT; ghx auth status 2>&1 | sed -n '1,6p') || true; done; exit 0;;
- status) while (($#)); do case "$1" in --account) shift; set_account "${1:-}"; shift;; *) die "unknown status option $1";; esac; done; ghx codespace list --json name,repository,state,machineName,createdAt,updatedAt,displayName; exit $?;;
+ status) while (($#)); do case "$1" in --account) shift; set_account "${1:-}"; shift;; *) die "unknown status option $1";; esac; done; ghx codespace list --json name,repository,state,machineName,createdAt,lastUsedAt,displayName,gitStatus,owner; exit $?;;
  run) ;;
  *) die "unknown command '$cmd'";; esac
 repo=''; launcher="$DEFAULT_REPO"; machine="$DEFAULT_MACHINE"; idle="$DEFAULT_IDLE"; retention="$DEFAULT_RETENTION"; workdir="$PWD"; keep=0; no_artifacts=0; dry=0
