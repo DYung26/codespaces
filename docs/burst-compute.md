@@ -42,7 +42,7 @@ The create API automatically selects `.devcontainer/devcontainer.json` if presen
 - `gh-odo` → `~/.config/gh-oyedanolu`
 - `gh-do` → `~/.config/gh-danieloyekunle`
 
-The connector authenticated as `DYung26` and confirmed `DYung26/codespaces` exists. The four secondary VPS CLI profiles currently have invalid tokens and require reauthentication. `gh-26` now points to the valid active DYung26 profile.
+All five VPS profiles were verified on 2026-10-30 with `gh auth status`; each is authenticated as the expected account and has the `codespace` scope. `gh-26` points to the active `~/.config/gh` profile.
 
 ## References
 
@@ -50,3 +50,8 @@ The connector authenticated as `DYung26` and confirmed `DYung26/codespaces` exis
 - https://docs.github.com/en/codespaces/troubleshooting/troubleshooting-included-usage
 - https://docs.github.com/en/codespaces/about-codespaces/understanding-the-codespace-lifecycle
 - https://cli.github.com/manual/gh_codespace_create
+
+
+## Smoke-test validation
+
+On 2026-10-30, the CLI was exercised against a disposable Codespace created from the default-image launcher. The test transferred a sanitized local worktree into `/workspaces/codespaces`, ran a remote command, retrieved its command log, exit code and generated artifact, then deleted the worker. The follow-up Codespaces list showed no remaining burst worker. The CLI uses `gh codespace cp -e` for transfers so remote filenames are correctly shell-expanded, and opens an SSH connection before transfer to ensure the worker is ready.
