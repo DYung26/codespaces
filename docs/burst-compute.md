@@ -8,9 +8,9 @@ Project-specific skills select commands and own preview deployment health checks
 
 ## Billing notes (verify against each account plan)
 
-GitHub currently lists 15 GB-month storage + 120 compute hours for Free personal accounts and 20 GB-month + 180 hours for Pro; current published rates list $0.36 per hour for 4-core Codespaces and $0.07 per GB-month storage. Organizational/enterprise billing may differ. These allowances reset per billing cycle; they are not necessarily a one-time first month of free service.
+GitHub currently lists 15 GB-month storage + 120 compute hours for Free personal accounts and 20 GB-month + 180 hours for Pro; current published rates list $0.36 per wall-clock hour for a 4-core Codespace and $0.07 per GB-month of billable storage. A 4-core hour consumes 4 included compute-hours, so 120 included hours on Free equate to 30 wall-clock hours on a 4-core worker (or 45 hours on Pro's 180-hour allowance). Organizational/enterprise billing may differ. These allowances reset per billing cycle; they are not necessarily a one-time first month of free service.
 
-32 GB is a Codespaces volume/maximum selection, not a flat charge for all 32 GB regardless of usage. Storage is measured by actual used volume over time (GB-hours). The base container created from GitHub's default Linux image is excluded from billable storage. A custom base image adds storage usage; a devcontainer configuration that only adds features to the default image can keep the base container excluded. The existing `DYung26/codespaces` launcher uses a custom image and several installation/startup hooks, which makes it a poor burst launcher.
+The `standardLinux32gb` machine provides 4 cores, 16 GB RAM and a 32 GB disk. The 32 GB disk figure is not a flat monthly charge simply because that machine type was selected: GitHub measures Codespaces storage over time in GB-hours, with the default base image excluded. Storage usage depends on the files and data in the Codespace and its base image. The base container created from GitHub's default Linux image is excluded from billable storage. A custom base image adds storage usage; a devcontainer configuration that only adds features to the default image can keep the base container excluded. The existing `DYung26/codespaces` launcher uses a custom image and several installation/startup hooks, which makes it a poor burst launcher.
 
 Only running Codespaces incur compute charges. Stopped Codespaces incur storage charges until deleted. Closing a browser tab does not stop a Codespace. Inactive Codespaces are deleted after their retention period (default 30 days); the CLI explicitly deletes its worker immediately by default.
 
@@ -36,13 +36,13 @@ The create API automatically selects `.devcontainer/devcontainer.json` if presen
 
 ## Account aliases found in dotfiles
 
-- `gh-26` → `~/.config/gh-dyung26`
+- `gh-26` → `~/.config/gh` (the active DYung26 profile; the old dedicated `gh-dyung26` directory had an invalid token)
 - `gh-06` → `~/.config/gh-dyung06`
 - `gh-df` → `~/.config/gh-dyungfirm`
 - `gh-odo` → `~/.config/gh-oyedanolu`
 - `gh-do` → `~/.config/gh-danieloyekunle`
 
-The connector authenticated as `DYung26` and confirmed `DYung26/codespaces` exists. The five local VPS CLI profiles and browser profiles could not be verified while the current VPS shell/browser MCP endpoints were returning internal errors.
+The connector authenticated as `DYung26` and confirmed `DYung26/codespaces` exists. The four secondary VPS CLI profiles currently have invalid tokens and require reauthentication. `gh-26` now points to the valid active DYung26 profile.
 
 ## References
 
